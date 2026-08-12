@@ -1,7 +1,7 @@
 import pygame
 pygame.init()
 window = pygame.display.get_surface()
-from os.path import join
+from os.path import join, splitext,basename
 from os import walk
 
 def import_image_frames(*path,scale =1, transparent = True):
@@ -11,7 +11,7 @@ def import_image_frames(*path,scale =1, transparent = True):
         
         if index == 0 and images:
             for image in sorted(images, key = lambda image: -int(image.split('.')[0].split('_')[1])):
-                print(join(paths, image))
+                # print(join(paths, image))
                 # surface = pygame.image.load(join(paths, image)).convert_alpha() if transparent else pygame.image.load(join(paths, image)).convert()
                 # .convert_alpha() if transparent else pygame.image.load(join(paths, image)).convert()
                 surface = pygame.image.load(join(paths, image))
@@ -22,7 +22,14 @@ def import_image_frames(*path,scale =1, transparent = True):
                 frames.append(scaled_surface)
         
     return frames
-
+def sort_image(image_sprite):
+    # print('hello')
+    # print(image_sprite)
+    # print(type(image_sprite.split('.')[0]))
+    
+    # print(int(image_sprite.split('.')[0]))
+    return  int(splitext(image_sprite)[0])
+    
 def import_frames_dict(*path,scale =1, transparent = True):
     frames = {}
    
@@ -34,9 +41,8 @@ def import_frames_dict(*path,scale =1, transparent = True):
         else:
             image_list= []
             
-            for image in sorted(images, key = lambda image_sprite: int(image_sprite.split('.')[0])):
-                            print('here again')
-                            # print(join(paths, image))
+            for image in sorted(images, key=  sort_image):
+                         
                             # surface = pygame.image.load(join(paths, image)).convert_alpha() if transparent else pygame.image.load(join(paths, image)).convert()
                             surface = pygame.image.load(join(paths, image))
                             new_scale_width = int(surface.get_width()*scale)
@@ -45,12 +51,12 @@ def import_frames_dict(*path,scale =1, transparent = True):
                             scaled_surface = pygame.transform.scale(surface, (new_scale_width, new_scale_height))
                             image_list.append(scaled_surface)
             
-            action = paths.split('\\')[-1]
+            action = basename(paths)
             frames[action]= image_list
     return frames
             
     # print(frames)
-            
+        
             
         
     
@@ -65,5 +71,5 @@ def import_image(*path,scale =1, transparent = True):
     scaled_surface = pygame.transform.scale(surface, (new_scale_width, new_scale_height))
     return scaled_surface
 
-print(import_frames_dict('img','enemies','purple_goblin',scale = 1, transparent = True))
-    
+# print(import_frames_dict('img','enemies','purple_goblin',scale = 1, transparent = True))
+# print(basename('img/enemies/purple_goblin'))

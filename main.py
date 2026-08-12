@@ -3,6 +3,7 @@ import pygame
 import sys
 from settings import *
 from util import import_image, import_image_frames ,import_frames_dict
+from enemy import enemy
 
 pygame.init()
 class castle():
@@ -25,7 +26,9 @@ class Castle_defender():
         self.running = True
         self.bg = import_image('img','bg.png')
         self.Castle = castle(0.2, 1000)
-        print(import_frames_dict('img','enemies','goblin',scale = 1, transparent = True))
+        self.enemies_group = pygame.sprite.Group()
+        self.enemy1 = enemy()
+        
         
         
     def run(self):
