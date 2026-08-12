@@ -2,7 +2,7 @@
 import pygame
 import sys
 from settings import *
-from util import import_image, import_image_frames 
+from util import import_image, import_image_frames ,import_frames_dict
 
 pygame.init()
 class castle():
@@ -25,6 +25,7 @@ class Castle_defender():
         self.running = True
         self.bg = import_image('img','bg.png')
         self.Castle = castle(0.2, 1000)
+        print(import_frames_dict('img','enemies','goblin',scale = 1, transparent = True))
         
         
     def run(self):
@@ -40,6 +41,8 @@ class Castle_defender():
             self.Castle.draw()
         
             pygame.display.update()
+
 if __name__ == '__main__':
     game = Castle_defender()
+    
     game.run()
