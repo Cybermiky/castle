@@ -5,6 +5,7 @@ from data import ENEMIES_DATA
 from settings import *
 from util import import_image, import_image_frames ,import_frames_dict
 from enemy_test import enemy
+from timer import Timer
 
 pygame.init()
 class castle():
@@ -34,6 +35,11 @@ class Castle_defender():
         self.Castle = castle(0.2, 1000)
         self.enemies_group = pygame.sprite.Group()
         self.enemy1 = enemy(100, screen_height -100,'goblin', self.Castle, self.enemies_group)
+        self.spawn_enemies = Timer(1000,self.spaw_enemies_func,autostart=True, one_time=False)
+        # self.spawn_enemies.activate()
+        
+    def spaw_enemies_func(self):
+        print('i spawn enemies')
         
         
         
@@ -44,7 +50,8 @@ class Castle_defender():
                 if event.type == pygame.QUIT:
                     self.running = False
                     sys.exit()
-            
+            # timer
+            self.spawn_enemies.update()
             # update
             # self.enemies_group.update(dt)
             
