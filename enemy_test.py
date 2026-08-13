@@ -32,6 +32,8 @@ class enemy(pygame.sprite.Sprite):
     
         self.rect = self.image.get_frect(bottomleft =(self.x , self.castle.rect.bottomleft[1]))
         self.hitbox_rect = self.rect.inflate(-25, -10) 
+        self.hitbox_offset = vector(int(self.image.get_width()*0.55)//2,0)
+        self.hitbox_rect.center = self.rect.center - self.hitbox_offset
         # self.rect.bo
         
         
@@ -43,11 +45,11 @@ class enemy(pygame.sprite.Sprite):
     #     return total_vector,direction
     def get_direction(self):
         target = vector(
-            self.castle.rect.left - self.rect.width / 2,
+            self.castle.rect.left - self.hitbox_rect.width / 2,
             self.castle.rect.bottomleft[1] * 0.9
         )
 
-        total_vector = target - vector(self.rect.center)
+        total_vector = target - vector(self.hitbox_rect.center)
 
         direction = total_vector.normalize() if total_vector.length() > 4 else vector(0, 0)
 
@@ -58,19 +60,18 @@ class enemy(pygame.sprite.Sprite):
         if total_vector.length() < 4:
             print('collison kicked in')
             self.collided = True
-            if self.rect.right >= self.castle.rect.left:
-                self.rect.right = self.castle.rect.left
+            if self.hitbox_rect.right >= self.castle.rect.left:
+                self.hitbox_rect.right = self.castle.rect.left
+                # self.rect.center = self.hitbox_rect.center
+                self.rect.center =  self.hitbox_rect.center + self.hitbox_offset
         else: 
             self.collided = False
-            
-             
-             
             
             
     def move_to_castle(self, dt):
         
-        self.rect.center += self.get_direction()[1] * self.animation_speed * dt
-        self.hitbox_rect.center = self.rect.center 
+        self.hitbox_rect.center += self.get_direction()[1] * self.animation_speed * dt
+        self.rect.center =  self.hitbox_rect.center + self.hitbox_offset
     def animate(self, dt):
         self.frame_index+= self.animation_speed*dt
         if(self.frame_index > len(self.enemy_frames[self.action])-1):

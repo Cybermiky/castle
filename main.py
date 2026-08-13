@@ -4,7 +4,7 @@ import sys
 from data import ENEMIES_DATA
 from settings import *
 from util import import_image, import_image_frames ,import_frames_dict
-from enemy import enemy
+from enemy_test import enemy
 
 pygame.init()
 class castle():
@@ -21,6 +21,7 @@ class castle():
         self.display_surface = pygame.display.get_surface()
     def draw(self):
         self.display_surface.blit(self.image, self.rect)
+        pygame.draw.rect(self.display_surface, 'blue',self.rect, 3)
         
 # print(screen_width, screen_height)
 class Castle_defender():
@@ -45,13 +46,16 @@ class Castle_defender():
                     sys.exit()
             
             # update
-            self.enemies_group.update(dt)
+            # self.enemies_group.update(dt)
+            
+            self.enemy1.update(dt)
                     
                     
             #  draw       
             self.display_suface.blit(self.bg, (0,0))
             self.Castle.draw()
-            self.enemies_group.draw(self.display_suface)
+            # self.enemies_group.draw(self.display_suface)
+            self.enemy1.draw()
             
         
             pygame.display.update()
