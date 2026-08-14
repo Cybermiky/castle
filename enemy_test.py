@@ -29,6 +29,7 @@ class enemy(pygame.sprite.Sprite):
         self.image = self.enemy_frames[self.action][self.frame_index]
         self.animation_speed = 45
         self.collided = False
+        self.is_attacking = False
     
         self.rect = self.image.get_frect(bottomleft =(self.x , self.castle.rect.bottomleft[1]))
         self.hitbox_rect = self.rect.inflate(-25, -10) 
@@ -44,21 +45,27 @@ class enemy(pygame.sprite.Sprite):
     #     print(direction)
     #     return total_vector,direction
     def get_direction(self):
-        target = vector(
-            self.castle.rect.left - self.hitbox_rect.width / 2,
-            self.castle.rect.bottomleft[1] * 0.9
-        )
+     
+            
+            target = vector(
+                self.castle.rect.left - self.hitbox_rect.width / 2,
+                self.castle.rect.bottomleft[1] * 0.9
+            )
 
-        total_vector = target - vector(self.hitbox_rect.center)
+            total_vector = target - vector(self.hitbox_rect.center)
 
-        direction = total_vector.normalize() if total_vector.length() > 4 else vector(0, 0)
+            if total_vector.length() > 4:
+                            direction = total_vector.normalize()
+            else:
+                direction =vector(0, 0)
+                self.is_attacking = True
 
-        return total_vector, direction
+            return total_vector, direction
     def collision(self):
         total_vector = self.get_direction()[0]
         
         if total_vector.length() < 4:
-            print('collison kicked in')
+            # print('collison kicked in')
             self.collided = True
             if self.hitbox_rect.right >= self.castle.rect.left:
                 self.hitbox_rect.right = self.castle.rect.left
@@ -69,9 +76,9 @@ class enemy(pygame.sprite.Sprite):
             
             
     def move_to_castle(self, dt):
-        
-        self.hitbox_rect.center += self.get_direction()[1] * self.animation_speed * dt
-        self.rect.center =  self.hitbox_rect.center + self.hitbox_offset
+        if not self.is_attacking:
+            self.hitbox_rect.center += self.get_direction()[1] * self.animation_speed * dt
+            self.rect.center =  self.hitbox_rect.center + self.hitbox_offset
     def animate(self, dt):
         self.frame_index+= self.animation_speed*dt
         if(self.frame_index > len(self.enemy_frames[self.action])-1):
@@ -82,10 +89,16 @@ class enemy(pygame.sprite.Sprite):
         
         pygame.draw.rect(self.surface, 'red',self.rect, 3)
         pygame.draw.rect(self.surface, 'green',self.hitbox_rect, 3)
+    def attack_castle(self):
+            if self.is_attacking:
+                self.action = 'attack'
+                print('attacking')
+        
     
     def update(self, dt):
         self.move_to_castle(dt)
         self.collision()
+        self.attack_castle()
         self.animate(dt)
     
         

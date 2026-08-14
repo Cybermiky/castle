@@ -10,6 +10,7 @@ class enemy(pygame.sprite.Sprite):
         self.scale = 0.2
         self.castle = castle
         self.surface = pygame.display.get_surface()
+        self.is_attacking = False
         
         
         self.enemy_type = enemy_type
@@ -42,16 +43,23 @@ class enemy(pygame.sprite.Sprite):
     #     print(direction)
     #     return total_vector,direction
     def get_direction(self):
-        target = vector(
-            self.castle.rect.left - self.rect.width / 2,
-            self.castle.rect.bottomleft[1] * 0.9
-        )
+        if not self.is_attacking:
+            target = vector(
+                self.castle.rect.left - self.rect.width / 2,
+                self.castle.rect.bottomleft[1] * 0.9
+            )
 
-        total_vector = target - vector(self.rect.center)
+            total_vector = target - vector(self.rect.center)
 
-        direction = total_vector.normalize() if total_vector.length() > 4 else vector(0, 0)
+            # direction = total_vector.normalize() if total_vector.length() > 4 else vector(0, 0)
+            if total_vector.length() > 4:
+                direction = total_vector.normalize()
+            else:
+                direction =vector(0, 0)
+                self.is_attacking = True
+                
 
-        return total_vector, direction
+            return total_vector, direction
     def collision(self):
         total_vector = self.get_direction()[0]
         
@@ -81,10 +89,15 @@ class enemy(pygame.sprite.Sprite):
         
         pygame.draw.rect(self.surface, 'red',self.rect, 3)
         pygame.draw.rect(self.surface, 'green',self.hitbox_rect, 3)
+    def attack_castle(self):
+        if self.is_attacking:
+            self.action = 'attacking'
+            print('attacking')
     
     def update(self, dt):
         self.move_to_castle(dt)
         self.collision()
+        self.attack_castle()
         self.animate(dt)
     
         

@@ -22,8 +22,6 @@ class Timer:
         self.start_time = None
         self.time_out = True
 
-    def working(self):
-        print('i am working')
 
     def update(self):
         if self.active:

@@ -60,7 +60,7 @@ def import_frames_dict(path_array,scale =1, transparent = True):
         
     
 
-def import_image(*path,scale =1, transparent = True):
+def import_image(path,scale =1, transparent = True):
     # print(str(list(*path)) +'from import image')
     surface = pygame.image.load(join(*path))
     # surface = pygame.image.load(join(*path)).convert_alpha() if transparent else pygame.image.load(join(*path)).convert()
@@ -71,4 +71,5 @@ def import_image(*path,scale =1, transparent = True):
     return scaled_surface
 
 array =  ENEMIES_DATA['red_goblin']['path']
-print(array)
+# print(array)
+import_image(['img','repair.png'], 0.6)
