@@ -27,7 +27,7 @@ class enemy(pygame.sprite.Sprite):
         self.health =  ENEMIES_DATA[enemy_type]['health']
         # print('health ', self.health)
         self.image = self.enemy_frames[self.action][self.frame_index]
-        self.animation_speed = 45
+        self.animation_speed = 25
         self.collided = False
         self.is_attacking = False
     
@@ -35,15 +35,10 @@ class enemy(pygame.sprite.Sprite):
         self.hitbox_rect = self.rect.inflate(-25, -10) 
         self.hitbox_offset = vector(int(self.image.get_width()*0.55)//2,0)
         self.hitbox_rect.center = self.rect.center - self.hitbox_offset
-        # self.rect.bo
+       
         
         
-        # print(self.enemy_frames)
-    # def get_direction(self):
-    #     total_vector = vector(self.castle.rect.bottomleft[0],int(self.castle.rect.bottomleft[1]* 0.9) ) - vector(self.rect.center)
-    #     direction = total_vector.normalize() if total_vector.length() >4  else vector(0,0)
-    #     print(direction)
-    #     return total_vector,direction
+  
     def get_direction(self):
      
             
